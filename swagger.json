@@ -1,148 +1,208 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Employee API",
-      "description": "API for managing employee data"
-    },
-    "basePath": "/",
-    "tags": [
-      {
-        "name": "employee",
-        "description": "Employee operations"
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Employee API",
+    "description": "API for managing employee data"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "employee",
+      "description": "Employee operations"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["employee"],
+        "summary": "Login",
+        "description": "Endpoint for employee login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Employee credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "message": {
+                  "type": "string",
+                  "default": "Login successful"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid email or password"
+          }
+        }
       }
-    ],
-    "paths": {
-      "/login": {
-        "post": {
-          "tags": ["employee"],
-          "summary": "Login",
-          "description": "Endpoint for employee login",
-          "consumes": ["application/json"],
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Employee credentials",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  }
+    },
+    "/register": {
+      "post": {
+        "tags": ["employee"],
+        "summary": "Register",
+        "description": "Endpoint for employee registration",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Employee data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
                 }
               }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Login successful",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "success": {
-                    "type": "boolean",
-                    "default": true
-                  },
-                  "message": {
-                    "type": "string",
-                    "default": "Login successful"
-                  },
-                  "token": {
-                    "type": "string"
-                  }
-                }
-              }
-            },
-            "401": {
-              "description": "Invalid email or password"
             }
           }
-          
-          
+        ],
+        "responses": {
+          "200": {
+            "description": "Registration successful"
+          }
         }
-      },
-      "/register": {
-        "post": {
-          "tags": ["employee"],
-          "summary": "Register",
-          "description": "Endpoint for employee registration",
-          "consumes": ["application/json"],
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Employee data",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string"
-                  },
-                  "password": {
-                    "type": "string"
-                  },
-                  "name": {
-                    "type": "string"
-                  }
+      }
+    },
+    "/update/{email}": {
+      "put": {
+        "tags": ["employee"],
+        "summary": "Update",
+        "description": "Endpoint for updating employee data",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "description": "Employee email",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Employee data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
                 }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Registration successful"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update successful"
+          },
+          "404": {
+            "description": "Employee not found"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["employee"],
+        "summary": "Get all users",
+        "description": "Endpoint for retrieving the list of all users",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "users": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         }
-      },
-      "/update/{email}": {
-        "put": {
-          "tags": ["employee"],
-          "summary": "Update",
-          "description": "Endpoint for updating employee data",
-          "consumes": ["application/json"],
-          "produces": ["application/json"],
-          "parameters": [
-            {
-              "in": "path",
-              "name": "email",
-              "description": "Employee email",
-              "required": true,
-              "type": "string"
-            },
-            {
-              "in": "body",
-              "name": "body",
-              "description": "Employee data",
-              "required": true,
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Update successful"
-            },
-            "404": {
-              "description": "Employee not found"
-            }
+      }
+    },
+    "/users/{email}": {
+      "delete": {
+        "tags": ["employee"],
+        "summary": "Delete a user",
+        "description": "Endpoint for deleting a user",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "email",
+            "description": "Employee email",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User deleted successfully"
+          },
+          "404": {
+            "description": "User not found"
           }
         }
       }
     }
   }
-  
+}

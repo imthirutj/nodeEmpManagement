@@ -100,7 +100,49 @@ app.post('/login', (req, res) => {
     });
   });
 
-  
+app.get('/users', authenticate, (req, res) => {
+  jsonfile.readFile(dataFilePath, (err, employees) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+      return;
+    }
+
+    res.json({ success: true, users: employees });
+  });
+});
+
+  // Add the following code after the '/users' endpoint
+
+app.delete('/users/:email', authenticate, (req, res) => {
+  const { email } = req.params;
+  jsonfile.readFile(dataFilePath, (err, employees) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+      return;
+    }
+
+    const index = employees.findIndex(emp => emp.email === email);
+    if (index !== -1) {
+      employees.splice(index, 1);
+
+      jsonfile.writeFile(dataFilePath, employees, err => {
+        if (err) {
+          console.error(err);
+          res.status(500).json({ success: false, message: 'Internal server error' });
+          return;
+        }
+
+        res.json({ success: true, message: 'User deleted successfully' });
+      });
+    } else {
+      res.status(404).json({ success: false, message: 'User not found' });
+    }
+  });
+});
+
+
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 
