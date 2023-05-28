@@ -16,6 +16,15 @@ app.use(bodyParser.json());
 
 const dataFilePath = './data/employees.json';
 
+
+// Enable CORS middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Replace '*' with the appropriate origin or restrict it to your Angular app's domain
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     jsonfile.readFile(dataFilePath, (err, employees) => {
